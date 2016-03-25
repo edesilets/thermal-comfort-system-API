@@ -18,6 +18,7 @@
   "homepage": "https://github.com/edesilets/thermal-comfort-system-API#readme",
   "dependencies": {
     "express": "^4.13.4",
-    "express-generator": "^4.13.1"
+    "express-generator": "^4.13.1",
+    "mqtt": "^1.7.4"
   }
 }
