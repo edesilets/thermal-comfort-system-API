@@ -1,6 +1,5 @@
 'use strict';
 
-let moment = require("moment"); // for time stamp
 let Knex = require("knex")({
   client: "pg",
   connection: {
@@ -16,6 +15,7 @@ exports.up = function(knex, Promise) {
     table.increments('id').primary();
     table.string('temperature');
     table.string('topic');
+    table.timestamps();
   });
 };
 
