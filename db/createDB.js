@@ -13,8 +13,9 @@ let Knex = require("knex")({
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('temperatures', function(table) {
     table.increments('id').primary();
-    table.string('temperature');
-    table.string('topic');
+    table.string('main_topic');
+    table.string('data_topic');
+    table.float('data');
     table.timestamps();
   });
 };
