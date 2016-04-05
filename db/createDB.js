@@ -11,8 +11,17 @@ let Knex = require("knex")({
 });
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('temperatures', function(table) {
-    table.increments('id').primary();
+  // HACK: this will only create one table.  needs to to both
+  return knex.schema.createTableIfNotExists('users', function(table) {
+    table.increments('id').notNullable().primary();
+    table.string('email'); // .notNullable().unique();
+    table.string('token').unique();
+    table.string('passwordDigest').notNullable();
+    table.timestamps();
+  });
+
+  knex.schema.createTableIfNotExists('temperatures', function(table) {
+    table.increments('id').notNullable().primary();
     table.string('main_topic');
     table.string('data_topic');
     table.float('data');
