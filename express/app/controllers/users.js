@@ -93,11 +93,9 @@ const signout = (req, res, next) => {
       token: token
     },{
       patch: true
-    });
+    }).then((user) => user ? res.sendStatus(200) : next(new HttpError(404)));
   })
-  .then((user) =>
-    user ? res.sendStatus(200) : next()
-  ).catch(next);
+  .catch(next);
 };
 
 const changepw = (req, res, next) => {
