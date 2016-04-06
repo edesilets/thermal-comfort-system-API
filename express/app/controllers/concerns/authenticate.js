@@ -41,11 +41,11 @@ const authenticate = (req, res, next) => {
     let opts = auth.replace(tokenRegex, '').split(separatorRegex);
     let signedToken = opts.shift();
     let token = decodeToken(signedToken);
-    User.query('where', 'passwordDigest', '=', token).fetch()
+    new User({ token: token}).fetch()
     .then(user => {
       if (user) {
         // HACK: Watch out  check data....
-        req.currentUser = user.toObject();
+        req.currentUser = user.attributes;
         return next();
       }
       res.set('WWW-Authenticate', 'Token realm="Application"');

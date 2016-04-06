@@ -82,16 +82,21 @@ const signin = (req, res, next) => {
 };
 
 const signout = (req, res, next) => {
-  // getToken().then(token =>
-  //   User.findOneAndUpdate({
-  //     _id: req.params.id,
-  //     token: req.currentUser.token,
-  //   }, {
-  //     token,
-  //   })
-  // ).then((user) =>
-  //   user ? res.sendStatus(200) : next()
-  // ).catch(next);
+  getToken().then((token) => {
+    let findUser = {
+      id: req.params.id,
+      token: req.currentUser.token
+    };
+    new User(findUser)
+    .save({
+      token: token
+    },{
+      patch: true
+    });
+  })
+  .then((user) =>
+    user ? res.sendStatus(200) : next()
+  ).catch(next);
 };
 
 const changepw = (req, res, next) => {
