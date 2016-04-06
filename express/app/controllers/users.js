@@ -9,6 +9,7 @@ const User = models.user;
 const crypto = require('crypto');
 
 const authenticate = require('./concerns/authenticate');
+const multer = require('./concerns/multer.js');
 
 const HttpError = require('express/lib/wiring/http-error');
 
@@ -122,5 +123,6 @@ module.exports = controller({
   signout,
   changepw,
 }, { before: [
-  { method: authenticate, except: ['signup', 'signin'] },
+  { method: authenticate, except: ['signup', 'signin'], },
+  { method: multer.single(), except: ['index', 'show', 'signout'], },
 ], });
