@@ -16,8 +16,6 @@ let User = bookshelf.Model.extend({
   tableName: 'users',
 
   setPassword: function (password) {
-
-    console.log('\n Set Password to: ', password, '\n');
     var _this = this;
     return new Promise((resolve, reject) =>
       bcrypt.genSalt(null, (err, salt) =>

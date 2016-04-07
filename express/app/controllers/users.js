@@ -50,7 +50,6 @@ const signup = (req, res, next) => {
     user.token = token
   )
   .then(() => {
-    console.log('Create a user: \n', user, '\n');
     return new User(user).setPassword(user.password);
   })
   .then((user) => user.save())
@@ -110,13 +109,10 @@ const changepw = (req, res, next) => {
   .then((searchResult) => {
     if (searchResult) {
       searchResult.comparePassword(req.body.passwords.old).then((user) => {
-        console.log('user, with digest: \n',user);
         delete user.attributes.passwordDigest;
-        console.log('user, without digest: \n',user);
         return user.setPassword(credentials.new);
       })
       .then((user)=> {
-        console.log('user, with new passwordDigest: \n', user);
         return user.save();
       })
       .then((user) => {
