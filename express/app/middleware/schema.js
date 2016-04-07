@@ -37,11 +37,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.up(Knex)
-.then(() => {
-  console.log('Table created sucessfully \n ');
-})
-.catch((err) => {
-  console.log('Table OK \n');
-});
+.then(() => { console.log('Table created sucessfully \n '); })
+.catch(() => { console.log('Table OK \n'); });
 
 module.exports = true;
