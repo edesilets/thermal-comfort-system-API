@@ -28,7 +28,7 @@ exports.up = function(knex, Promise) {
   }).createTableIfNotExists('rules', function(table) {
     table.increments('id').notNullable().primary();
     table.string('name');
-    table.integer('temperature');
+    table.float('temperature');
     table.string('operator');
     table.string('action');
     table.string('active');
@@ -40,6 +40,8 @@ exports.up(Knex)
 .then(() => {
   console.log('Table created sucessfully \n ');
 })
-.catch((err) => { console.log('Table OK \n');});
+.catch((err) => {
+  console.log('Table OK \n');
+});
 
 module.exports = true;
