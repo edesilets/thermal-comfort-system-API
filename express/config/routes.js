@@ -8,7 +8,7 @@ module.exports = require('express/lib/wiring/routes')
 .root('root#root')
 
 // standards RESTful routes
-.resources('rules', { only: ['create']})
+.resources('rules', { only: ['create', 'destroy']})
 
 
 // users of the app have special requirements

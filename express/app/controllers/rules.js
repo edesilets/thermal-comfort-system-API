@@ -18,8 +18,18 @@ const create = (req, res, next) => {
   });
 };
 
+const destroy = (req, res, next) => {
+  let search = { id: req.params.id };
+  console.log('\n destroy \n');
+  new Rule(search).destroy()
+  .then(() => res.sendStatus(200))
+  .catch(err => next(err));
+};
+
 module.exports = controller({
   create,
+  destroy,
 }, { before: [
+  { method: authenticate, only: ['create', 'destroy'], },
   { method: multer.single(), only: ['create'], },
 ], });
