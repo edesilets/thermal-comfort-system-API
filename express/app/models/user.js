@@ -12,28 +12,6 @@ const Knex = require("knex")({
 });
 const bookshelf = require("bookshelf")(Knex);
 
-exports.up = function(knex, Promise) {
-  return knex.schema.createTableIfNotExists('users', function(table) {
-    table.increments('id').notNullable().primary();
-    table.string('email').notNullable().unique();
-    table.string('token').unique();
-    table.string('passwordDigest').notNullable();
-    table.timestamps();
-  }).createTableIfNotExists('temperatures', function(table) {
-    table.increments('id').notNullable().primary();
-    table.string('main_topic');
-    table.string('data_topic');
-    table.float('data');
-    table.timestamps();
-  });
-};
-
-exports.up(Knex)
-.then(() => {
-  console.log('Table created sucessfully');
-})
-.catch((err) => { console.log('opps little error keep going.');});
-
 let User = bookshelf.Model.extend({
   tableName: 'users',
   initialize: function() {
