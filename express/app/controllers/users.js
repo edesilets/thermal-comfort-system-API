@@ -13,12 +13,13 @@ const multer = require('./concerns/multer.js');
 
 const HttpError = require('express/lib/wiring/http-error');
 
-const getToken = () =>
-  new Promise((resolve, reject) =>
-    crypto.randomBytes(16, (err, data) =>
-      err ? reject(err) : resolve(data.toString('base64'))
-    )
-  );
+const getToken = () => {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(16, (err, data) => {
+      err ? reject(err) : resolve(data.toString('base64'));
+    });
+  });
+};
 
 const userFilter = { passwordDigest: 0, token: 0 };
 
