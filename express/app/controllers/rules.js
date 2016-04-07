@@ -18,6 +18,15 @@ const create = (req, res, next) => {
   });
 };
 
+const update = (req, res, next) => {
+  let search = { id: req.params.id };
+  let update = req.body.rule;
+  new Rule(search)
+    .save(update, {patch: true})
+    .then((newModel) => newModel ? res.sendStatus(200) : next(new HttpError(404)))
+    .catch(err => next(err));
+};
+
 const destroy = (req, res, next) => {
   let search = { id: req.params.id };
   console.log('\n destroy \n');
@@ -28,8 +37,9 @@ const destroy = (req, res, next) => {
 
 module.exports = controller({
   create,
+  update,
   destroy,
 }, { before: [
-  { method: authenticate, only: ['create', 'destroy'], },
-  { method: multer.single(), only: ['create'], },
+  { method: authenticate, only: ['create', 'destroy','update'], },
+  { method: multer.single(), only: ['create', 'update'], },
 ], });
