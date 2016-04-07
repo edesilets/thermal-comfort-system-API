@@ -8,7 +8,8 @@ module.exports = require('express/lib/wiring/routes')
 .root('root#root')
 
 // standards RESTful routes
-.resources('examples')
+.resources('rules', { only: ['create']})
+
 
 // users of the app have special requirements
 .post('/sign-up', 'users#signup')
@@ -16,6 +17,7 @@ module.exports = require('express/lib/wiring/routes')
 .delete('/sign-out/:id', 'users#signout')
 .patch('/change-password/:id', 'users#changepw')
 .resources('users', { only: ['index', 'show'] })
+// .resources('rules', { only: ['index', 'show', 'create','update','destroy'] });
 
 // all routes created
 ;
