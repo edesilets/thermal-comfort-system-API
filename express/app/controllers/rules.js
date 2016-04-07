@@ -14,6 +14,14 @@ const index = (req, res, next) => {
   .catch(err => next(err));
 };
 
+const show = (req, res, next) => {
+  let search = { id: req.params.id };
+  new Rule(search)
+  .fetch()
+  .then(rule => res.json({ rule }))
+  .catch(err => next(err))
+};
+
 const create = (req, res, next) => {
   let insert = req.body.rule
   console.log('\n Request Owner: \n', req.currentUser);
@@ -44,10 +52,11 @@ const destroy = (req, res, next) => {
 
 module.exports = controller({
   index,
+  show,
   create,
   update,
   destroy,
 }, { before: [
-  { method: authenticate, only: ['create', 'destroy','update'], },
+  { method: authenticate, only: ['create', 'destroy','update', 'show', 'index'], },
   { method: multer.single(), only: ['create', 'update'], },
 ], });
