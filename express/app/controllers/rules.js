@@ -7,6 +7,13 @@ const Rule = models.rule;
 const authenticate = require('./concerns/authenticate');
 const multer = require('./concerns/multer.js');
 
+const index = (req, res, next) => {
+  new Rule()
+  .fetchAll()
+  .then(allRules => res.json({ allRules }))
+  .catch(err => next(err));
+};
+
 const create = (req, res, next) => {
   let insert = req.body.rule
   console.log('\n Request Owner: \n', req.currentUser);
@@ -36,6 +43,7 @@ const destroy = (req, res, next) => {
 };
 
 module.exports = controller({
+  index,
   create,
   update,
   destroy,
