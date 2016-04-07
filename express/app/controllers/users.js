@@ -73,12 +73,10 @@ const signin = (req, res, next) => {
   .then((user) => {
     return getToken().then((token) => {
       user.attributes.token = token;
-      console.log('user attributes:\n', user.attributes);
       return user.save();
     });
   })
   .then((user) => {
-    console.log('userModel:\n', user);
     let userAttributes = user.attributes;
     delete userAttributes.passwordDigest;
     res.json({ userAttributes });
