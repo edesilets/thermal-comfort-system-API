@@ -1,6 +1,6 @@
 'use strict';
 
-let Knex = require("knex")({
+const Knex = require("knex")({
   client: "pg",
   connection: {
     host: "localhost",
@@ -10,10 +10,12 @@ let Knex = require("knex")({
   }
 });
 
+const bookshelf = require("bookshelf")(Knex);
+
 exports.up = function(knex, Promise) {
   return knex.schema.createTableIfNotExists('users', function(table) {
     table.increments('id').notNullable().primary();
-    table.string('email'); // .notNullable().unique();
+    table.string('email').notNullable().unique();
     table.string('token').unique();
     table.string('passwordDigest').notNullable();
     table.timestamps();
@@ -23,17 +25,19 @@ exports.up = function(knex, Promise) {
     table.string('data_topic');
     table.float('data');
     table.timestamps();
+  }).createTableIfNotExists('rules', function(table) {
+    table.increments('id').notNullable().primary();
+    table.string('name');
+    table.float('temperature');
+    table.string('operator');
+    table.string('action');
+    table.string('active');
+    table.timestamps();
   });
 };
 
 exports.up(Knex)
-.catch((err) => {
-  Knex.destroy();
-  console.log("Connection closed..");
-  throw err;
-})
-.then(() => {
-  console.log('Table created sucessfully');
-  Knex.destroy();
-  console.log("Connection closed..");
-});
+.then(() => { console.log('Table created sucessfully \n '); })
+.catch(() => { console.log('Table OK \n'); });
+
+module.exports = true;

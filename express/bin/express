@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case ${1} in
+  s|server)
+    NODE_PATH=${PWD} node ${PWD}/express/server.js
+    echo "${PWD}"
+    ;;
+  *)
+  echo "${1} unknown command"
+esac
