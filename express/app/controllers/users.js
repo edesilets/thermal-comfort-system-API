@@ -67,19 +67,22 @@ const signin = (req, res, next) => {
   let credentials = req.body.credentials;
   let search = { email: credentials.email };
   new User(search).fetch()
-  .then(user =>
-    user ? user.comparePassword(credentials.password) : Promise.reject(new HttpError(404))
-  )
-  .then(user => {
-    getToken().then(token => {
-      user.token = token;
-      return new User(search).save(user, { patch: true })
-      .then((userData) => {
-        let user = userData.attributes;
-        delete user.passwordDigest;
-        res.json({ user });
-      });
+  .then((user) => {
+    return user? user.comparePassword(credentials.password) :
+                 Promise.reject(new HttpError(404));
+  })
+  .then((user) => {
+    return getToken().then((token) => {
+      user.attributes.token = token;
+      console.log('user attributes:\n', user.attributes);
+      return user.save();
     });
+  })
+  .then((user) => {
+    console.log('userModel:\n', user);
+    let userAttributes = user.attributes;
+    delete userAttributes.passwordDigest;
+    res.json({ userAttributes });
   })
   .catch(makeErrorHandler(res, next));
 };
