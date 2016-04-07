@@ -50,8 +50,10 @@ const signup = (req, res, next) => {
     user.token = token
   )
   .then(() => {
-    return new User(user).save();
+    console.log('Create a user: \n', user, '\n');
+    return new User(user).setPassword(user.password);
   })
+  .then((user) => user.save())
   .then(newUser => {
     let user = newUser.attributes;
     delete user.passwordDigest;
@@ -74,7 +76,6 @@ const signin = (req, res, next) => {
       .then((userData) => {
         let user = userData.attributes;
         delete user.passwordDigest;
-        console.log('yayaya user obj: \n', user);
         res.json({ user });
       });
     });
@@ -100,17 +101,33 @@ const signout = (req, res, next) => {
 
 const changepw = (req, res, next) => {
   debug('Changing password');
-  // User.findOne({
-  //   _id: req.params.id,
-  //   token: req.currentUser.token,
-  // }).then(user =>
-  //   user ? user.comparePassword(req.body.passwords.old) :
-  //     Promise.reject(new HttpError(404))
-  // ).then(user =>
-  //   user.setPassword(req.body.passwords.old)
-  // ).then((/* user */) =>
-  //   res.sendStatus(200)
-  // ).catch(makeErrorHandler(res, next));
+  let credentials = req.body.passwords;
+  let search = {
+                id: req.params.id,
+                token: req.currentUser.token,
+              };
+  new User(search).fetch()
+  .then((searchResult) => {
+    if (searchResult) {
+      searchResult.comparePassword(req.body.passwords.old).then((user) => {
+        console.log('user, with digest: \n',user);
+        delete user.attributes.passwordDigest;
+        console.log('user, without digest: \n',user);
+        return user.setPassword(credentials.new);
+      })
+      .then((user)=> {
+        console.log('user, with new passwordDigest: \n', user);
+        return user.save();
+      })
+      .then((user) => {
+        user ? res.sendStatus(200) : next(new HttpError(404));
+      })
+      .then(new HttpError(404));
+    } else {
+      Promise.reject(new HttpError(404));
+    }
+  })
+  .then(console.log);
 };
 
 module.exports = controller({
