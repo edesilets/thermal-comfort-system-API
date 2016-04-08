@@ -1,6 +1,6 @@
 #!/bin/bash
 # --include \
-TOKEN='DsacymqWFS24I5tCDEQTnw=='
+TOKEN='Aw8Rg5B1M39UXc2+sPDrPw=='
 
 curl \
   --silent  \

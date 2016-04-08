@@ -1,12 +1,12 @@
 #!/bin/bash
-TOKEN='gjLyXo3/W0G9/FnK4CdQAw=='
+TOKEN='aQ6h6OHHe4DjzxewrsaTVg=='
 ID=1
 curl --include --request PATCH http://localhost:3000/change-password/$ID \
   --header "Authorization: Token token=$TOKEN" \
   --header "Content-Type: application/json" \
   --data '{
     "passwords": {
-      "old": "password",
+      "old": "jake",
       "new": "password"
     }
   }'
