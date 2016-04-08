@@ -10,7 +10,7 @@ const cors = require('cors');
 const loader = require('express/lib/wiring/loader');
 
 var corsOptions = {
-  origin: process.env.GITHUB_IO_URL || 'http://localhost:8080',
+  origin: process.env.GITHUB_IO_URL || 'http://edesilets.github.io/thermal-comfort-system-frontend/',//'http://localhost:8080',
 };
 
 const before = (app) => {
