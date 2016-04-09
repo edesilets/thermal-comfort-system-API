@@ -9,9 +9,15 @@ const cors = require('cors');
 
 const loader = require('express/lib/wiring/loader');
 
+var whitelist = ['http://edesilets.github.io', 'http://localhost:8080'];
 var corsOptions = {
-  origin: process.env.GITHUB_IO_URL || 'http://edesilets.github.io',//'http://localhost:8080',
+  origin: function(origin, callback){
+    var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    callback(null, originIsWhitelisted);
+  }
 };
+
+
 
 const before = (app) => {
   app.use(cors(corsOptions));
