@@ -76,10 +76,10 @@ const signin = (req, res, next) => {
       return user.save();
     });
   })
-  .then((user) => {
-    let userAttributes = user.attributes;
-    delete userAttributes.passwordDigest;
-    res.json({ userAttributes });
+  .then((userModel) => {
+    let user = userModel.attributes;
+    delete user.passwordDigest;
+    res.json({ user });
   })
   .catch(makeErrorHandler(res, next));
 };
