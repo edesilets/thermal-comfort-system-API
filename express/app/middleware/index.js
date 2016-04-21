@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const loader = require('express/lib/wiring/loader');
 
-var whitelist = ['http://edesilets.github.io', 'http://localhost:8080'];
+var whitelist = ['http://edesilets.github.io', 'http://localhost:8080',' http://ethandesilets.com'];
 var corsOptions = {
   origin: function(origin, callback){
     var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
