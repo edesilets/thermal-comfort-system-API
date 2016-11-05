@@ -6,7 +6,7 @@ let Knex = require("knex")({
     host: "localhost",
     user: "pi",
     password: "password",
-    database: "homestatus"
+    database: "test"
   }
 });
 

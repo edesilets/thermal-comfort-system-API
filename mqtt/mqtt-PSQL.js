@@ -8,13 +8,19 @@ let Knex   = require("knex")({
     host: "localhost",
     user: "pi",
     password: "password",
-    database: "homestatus"
+    database: "test"
   }
 });
 
 let Bookshelf = require("bookshelf")(Knex);
-let Temperature = Bookshelf.Model.extend({
-    tableName: 'temperatures'
+let livingroom = Bookshelf.Model.extend({
+    tableName: 'livingroom'
+});
+let coalshed = Bookshelf.Model.extend({
+    tableName: 'coalshed'
+});
+let basement = Bookshelf.Model.extend({
+    tableName: 'basement'
 });
 
 let client  = mqtt.connect('mqtt://homestatus.ddns.net', {
@@ -30,34 +36,34 @@ client.on('connect', function () {
 client.on('message', function (topic, message) {
   // /home/livingroom/thermostat/temperature/livingroom
   let topicArray = topic.toString().split('/');
-  let db = topicArray[0];
-  let table = topicArray[1];
-  let item = topicArray[2];
-  let sensorType = topicArray[3];
-  let sensorLocation = topicArray[4];
+  let db = topicArray[1];
+  let table = topicArray[2];
+  let item = topicArray[3];
+  let sensorType = topicArray[4];
+  let sensorLocation = topicArray[5];
 
   let messageString = message.toString().replace(' ', '');
   let floatMessage = parseFloat(messageString);
-  console.log(`Message: ${messageString}, Topic: ${topicString}`);
+ console.log(`Message: ${messageString}, Topic: ${topic.toString()}`);
 
   let data = {
     item: item,
     sensor_type: sensorType,
     sensor_location: sensorLocation,
-    data: float,
+    data: floatMessage,
     created_at: moment().format(),
     updated_at: moment().format()
   }
 
-  console.log('\n',data);
+//  console.log('\n',data);
   switch (table) {
-    case livingroom:
+    case 'livingroom':
         new livingroom(data).save();
       break;
-    case coalshed:
+    case 'coalshed':
         new coalshed(data).save();
       break;
-    case basement:
+    case 'basement':
         new basement(data).save();
       break;
     default:
