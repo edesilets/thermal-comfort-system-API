@@ -27,41 +27,43 @@ client.on('connect', function () {
   console.log('subscribed and now published');
 });
 
-	client.on('message', function (topic, message) {
-    let dataTopic = false;
-    let topicString = topic.toString();
-    let messageString = message.toString().replace(' ', '');
-    //console.log(`Message: ${messageString}, Topic: ${topicString}`);
+client.on('message', function (topic, message) {
+  // /home/livingroom/thermostat/temperature/livingroom
+  let topicArray = topic.toString().split('/');
+  let db = topicArray[0];
+  let table = topicArray[1];
+  let item = topicArray[2];
+  let sensorType = topicArray[3];
+  let sensorLocation = topicArray[4];
 
-    if (topicString === '/home/boiler/temperature/inletpipe' || topicString === '/coalshed/temperature/inletpipe') {
-      dataTopic = 'temperature/inletpipe';
+  let messageString = message.toString().replace(' ', '');
+  let floatMessage = parseFloat(messageString);
+  console.log(`Message: ${messageString}, Topic: ${topicString}`);
 
-    } else if (topicString === '/home/boiler/temperature/outletpipe' || topicString === '/coalshed/temperature/outletpipe') {
-      dataTopic = 'temperature/outletpipe';
+  let data = {
+    item: item,
+    sensor_type: sensorType,
+    sensor_location: sensorLocation,
+    data: float,
+    created_at: moment().format(),
+    updated_at: moment().format()
+  }
 
-    } else if (topicString === '/coalshed/temperature/waterjacket') {
-      dataTopic = 'temperature/waterjacket';
-
-    } else if (topicString === '/coalshed/pressure' ) {
-      dataTopic = 'pressure'
-    }
-     else {
-      dataTopic = 'false';
-    }
-
-    // cleanse input
-    let floatMessage = parseFloat(messageString);
-    let mainTopic = topicString.split('/');
-
-    let data = {
-      main_topic: mainTopic[1],
-      data_topic: dataTopic,
-      data: floatMessage,
-      created_at: moment().format(),
-      updated_at: moment().format(),
-    };
-    console.log('\n',data);
-    new Temperature(data).save();
+  console.log('\n',data);
+  switch (table) {
+    case livingroom:
+        new livingroom(data).save();
+      break;
+    case coalshed:
+        new coalshed(data).save();
+      break;
+    case basement:
+        new basement(data).save();
+      break;
+    default:
+      console.log("TABLE DOESN'T EXIST YET");
+      console.log(data);
+  }
 });
 
 client.on('error', function(error){
