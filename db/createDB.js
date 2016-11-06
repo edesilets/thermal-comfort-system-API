@@ -17,23 +17,10 @@ exports.up = function(knex, Promise) {
     table.string('token').unique();
     table.string('passwordDigest').notNullable();
     table.timestamps();
-  }).createTableIfNotExists('livingroom', function(table) {
+  }).createTableIfNotExists('status', function(table) {
     table.increments('id').notNullable().primary();
     table.string('item');
-    table.string('sensor_type');
-    table.string('sensor_location');
-    table.float('data');
-    table.timestamps();
-  }).createTableIfNotExists('coalshed', function(table) {
-    table.increments('id').notNullable().primary();
-    table.string('item');
-    table.string('sensor_type');
-    table.string('sensor_location');
-    table.float('data');
-    table.timestamps();
-  }).createTableIfNotExists('basement', function(table) {
-    table.increments('id').notNullable().primary();
-    table.string('item');
+    table.string('main_location');
     table.string('sensor_type');
     table.string('sensor_location');
     table.float('data');
