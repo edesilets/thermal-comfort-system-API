@@ -13,14 +13,8 @@ let Knex   = require("knex")({
 });
 
 let Bookshelf = require("bookshelf")(Knex);
-let livingroom = Bookshelf.Model.extend({
-    tableName: 'livingroom'
-});
-let coalshed = Bookshelf.Model.extend({
-    tableName: 'coalshed'
-});
-let basement = Bookshelf.Model.extend({
-    tableName: 'basement'
+let status = Bookshelf.Model.extend({
+    tableName: 'status'
 });
 
 let client  = mqtt.connect('mqtt://homestatus.ddns.net', {
@@ -37,38 +31,28 @@ client.on('message', function (topic, message) {
   // /home/livingroom/thermostat/temperature/livingroom
   let topicArray = topic.toString().split('/');
   let db = topicArray[1];
-  let table = topicArray[2];
+  let mainLocation = topicArray[2];
   let item = topicArray[3];
   let sensorType = topicArray[4];
   let sensorLocation = topicArray[5];
 
-  let messageString = message.toString().replace(' ', '');
-  let floatMessage = parseFloat(messageString);
- console.log(`Message: ${messageString}, Topic: ${topic.toString()}`);
+  if (topicArray.length === 6) {
+    let messageString = message.toString().replace(' ', '');
+    let floatMessage = parseFloat(messageString);
+    console.log(`Message: ${messageString}, Topic: ${topic.toString()}`);
 
-  let data = {
-    item: item,
-    sensor_type: sensorType,
-    sensor_location: sensorLocation,
-    data: floatMessage,
-    created_at: moment().format(),
-    updated_at: moment().format()
-  }
+    let data = {
+      item: item,
+      main_location: mainLocation,
+      sensor_type: sensorType,
+      sensor_location: sensorLocation,
+      data: floatMessage,
+      created_at: moment().format(),
+      updated_at: moment().format()
+    }
+    console.log(data);
 
-//  console.log('\n',data);
-  switch (table) {
-    case 'livingroom':
-        new livingroom(data).save();
-      break;
-    case 'coalshed':
-        new coalshed(data).save();
-      break;
-    case 'basement':
-        new basement(data).save();
-      break;
-    default:
-      console.log("TABLE DOESN'T EXIST YET");
-      console.log(data);
+    new status(data).save();
   }
 });
 
