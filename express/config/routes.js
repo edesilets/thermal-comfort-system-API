@@ -9,8 +9,7 @@ module.exports = require('express/lib/wiring/routes')
 
 // standards RESTful routes
 .resources('rules', { only: ['create', 'destroy', 'update', 'index', 'show']})
-
-
+.resources('coalshed', { only: ['index', 'show']})
 // users of the app have special requirements
 .post('/sign-up', 'users#signup')
 .post('/sign-in', 'users#signin')
