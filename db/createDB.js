@@ -6,7 +6,7 @@ let Knex = require("knex")({
     host: "localhost",
     user: "pi",
     password: "password",
-    database: "homestatus"
+    database: "test"
   }
 });
 
@@ -17,10 +17,12 @@ exports.up = function(knex, Promise) {
     table.string('token').unique();
     table.string('passwordDigest').notNullable();
     table.timestamps();
-  }).createTableIfNotExists('temperatures', function(table) {
+  }).createTableIfNotExists('status', function(table) {
     table.increments('id').notNullable().primary();
-    table.string('main_topic');
-    table.string('data_topic');
+    table.string('item');
+    table.string('main_location');
+    table.string('sensor_type');
+    table.string('sensor_location');
     table.float('data');
     table.timestamps();
   });
