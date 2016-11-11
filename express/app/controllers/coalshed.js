@@ -36,7 +36,21 @@ const show = (req, res, next) => {
     orderBy: ['created_at', 'DESC']
   })
   .fetchAll()
-  .then(rule => res.json({ rule }))
+  .then(boilerData => {
+    let graphData = [];
+
+    boilerData.models.forEach(function (e) {
+      let dateCreated = e.attributes.created_at;
+      let temperature = e.attributes.data;
+      let dataPoint = {
+        x: dateCreated,
+        y: temperature
+      };
+      graphData.push(dataPoint);
+    });
+
+    res.json({ graphData });
+  })
   .catch(err => next(err));
 };
 
