@@ -3,6 +3,7 @@
 const controller = require('express/lib/wiring/controller');
 const models = require('express/app/models');
 const Coalshed = models.coalshed;
+const formatting = require('../services/formatting');
 
 const authenticate = require('./concerns/authenticate');
 const multer = require('./concerns/multer.js');
@@ -36,20 +37,9 @@ const show = (req, res, next) => {
     orderBy: ['created_at', 'DESC']
   })
   .fetchAll()
-  .then(boilerData => {
-    let graphData = [];
-
-    boilerData.models.forEach(function (e) {
-      let dateCreated = e.attributes.created_at;
-      let temperature = e.attributes.data;
-      let dataPoint = {
-        x: dateCreated,
-        y: temperature
-      };
-      graphData.push(dataPoint);
-    });
-
-    res.json({ graphData });
+  .then((boilerData) => {
+    let points = formatting.graphPoints(boilerData.models);
+    return res.json({ points });
   })
   .catch(err => next(err));
 };
