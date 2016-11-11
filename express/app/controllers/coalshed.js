@@ -32,7 +32,8 @@ const show = (req, res, next) => {
   new Coalshed()
   .query({
     where: search,
-    limit: 500
+    limit: 500,
+    orderBy: ['created_at', 'DESC']
   })
   .fetchAll()
   .then(rule => res.json({ rule }))
